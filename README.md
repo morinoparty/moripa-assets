@@ -1,14 +1,13 @@
 # moripa-assets
 
-もりのパーティ（morinoparty）のアイコン・ロゴ・画像などの素材置き場です。
+もりのパーティ（morinoparty）のロゴ・画像などの素材置き場です。
 
-`icon/` と `logo/` は [morino.party](https://morino.party) の `/assets/` 以下と同じ構成です。
+`logo/` は [morino.party](https://morino.party) の `/assets/` 以下と同じ構成です。
 
 ## 構成
 
 | パス | 内容 |
 | --- | --- |
-| `icon/` | UI 用の SVG アイコン（map, leaf, star, discord など） |
 | `logo/` | ロゴ類（`logo-72.png`, `logo_border.svg`, `favicon.ico`, もりパニュース, 切手・スタンプ） |
 | `city/<id>/<id>.{png,webp,avif}` | 街の風景画像 |
 | `city/<id>/<id>-text.{png,webp,avif}` | 街のキャッチコピー＋街名の文字画像（透過） |
