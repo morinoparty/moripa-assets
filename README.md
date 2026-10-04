@@ -8,7 +8,7 @@
 
 | パス | 内容 |
 | --- | --- |
-| `logo/` | ロゴ類（`logo-72.png`, `logo_border.svg`, `favicon.ico`, もりパニュース, 切手・スタンプ） |
+| `logo/` | ロゴ類（`logo-72.png`, `logo_border.svg`, もりパニュース, 切手・スタンプ） |
 | `city/<id>/<id>.{png,webp,avif}` | 街の風景画像 |
 | `city/<id>/<id>-text.{png,webp,avif}` | 街のキャッチコピー＋街名の文字画像（透過） |
 
@@ -24,6 +24,6 @@
 
 ## 出典
 
-`../morino.party` リポジトリの `public/assets/` と `src/app/favicon.ico` からコピーしたものです
+`../morino.party` リポジトリの `public/assets/` からコピーしたものです
 （2026-10-04 時点で公開サイトの配信内容と一致することを確認済み）。
 AVIF（全画像）と文字画像の WebP は、PNG から sharp で生成しました。
