@@ -1,0 +1,12 @@
+{
+    "title": "moripa-assets",
+    "pages": [
+        "---[Rocket]はじめに---",
+        "index",
+        "usage",
+        "---[Images]素材---",
+        "...gallery",
+        "---[Hammer]開発---",
+        "...development"
+    ]
+}

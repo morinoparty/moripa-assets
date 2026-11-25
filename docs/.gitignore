@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output (公開するのは out/ のみ)
+out/
+dist/
+.output/
+
+# Generated source
+.source/
+.tanstack/
+styled-system/
+
+# Generated assets (scripts/build-assets.ts が assets/ から生成する)
+public/
+src/generated/
+
+# Wrangler
+.wrangler/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.production.local

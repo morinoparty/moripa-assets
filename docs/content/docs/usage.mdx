@@ -1,0 +1,104 @@
+---
+title: 使い方
+description: 素材の URL、形式、マニフェスト、BlurHash の使い方
+---
+
+## 形式
+
+1 つの元画像から、次の形式のファイルを配信しています。
+
+| 形式 | 拡張子 | 出力する条件 |
+|------|--------|--------------|
+| SVG | `.svg` | 元画像が SVG の場合 (元のファイルをそのまま配信) |
+| PNG | `.png` | 常に (元画像が PNG ならそのまま、SVG なら長辺 1024px でラスター化) |
+| WebP | `.webp` | 常に |
+| AVIF | `.avif` | 常に |
+| JPEG | `.jpg` | 透過を含まない画像のみ (街の風景画像など) |
+
+`favicon` の素材には、次のファイルも追加で配信しています。
+
+| ファイル | 用途 |
+|----------|------|
+| `<name>.ico` | 16 / 32 / 48px を含む ICO (`<link rel="icon" sizes="any">`) |
+| `<name>-32.png` | ブラウザのタブ |
+| `<name>-180.png` | `apple-touch-icon` |
+| `<name>-192.png` / `<name>-512.png` | Web App Manifest |
+
+## HTML での使い方
+
+AVIF と WebP に対応していないブラウザでも表示されるよう、`<picture>` で PNG または JPEG にフォールバックします。
+
+```html
+<picture>
+  <source srcset="https://assets.morinoparty.workers.dev/city/morimoto/morimoto.avif" type="image/avif" />
+  <source srcset="https://assets.morinoparty.workers.dev/city/morimoto/morimoto.webp" type="image/webp" />
+  <img src="https://assets.morinoparty.workers.dev/city/morimoto/morimoto.png" width="1920" height="1080" alt="もりもと" />
+</picture>
+```
+
+favicon は次のように指定します。
+
+```html
+<link rel="icon" href="https://assets.morinoparty.workers.dev/favicon/fishing/fishing.ico" sizes="any" />
+<link rel="icon" type="image/png" href="https://assets.morinoparty.workers.dev/favicon/fishing/fishing-32.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="https://assets.morinoparty.workers.dev/favicon/fishing/fishing-180.png" />
+```
+
+## マニフェスト
+
+[`/manifest.json`](https://assets.morinoparty.workers.dev/manifest.json) に、すべての素材の情報を JSON で出力しています。
+
+```json
+{
+  "origin": "https://assets.morinoparty.workers.dev",
+  "assets": [
+    {
+      "id": "city/morimoto/morimoto",
+      "category": "city",
+      "group": "morimoto",
+      "name": "morimoto",
+      "source": "city/morimoto/morimoto.png",
+      "width": 1920,
+      "height": 1080,
+      "opaque": true,
+      "blurhash": "CS9IJSMdaJnhu6Vrt6jF",
+      "files": [
+        { "path": "city/morimoto/morimoto.png", "format": "png", "width": 1920, "height": 1080, "bytes": 662360 }
+      ]
+    }
+  ]
+}
+```
+
+| フィールド | 内容 |
+|------------|------|
+| `id` | `<category>/<group>/<name>` |
+| `source` | リポジトリの `assets/` からの元画像のパス |
+| `width` / `height` | 元画像のサイズ (SVG は `viewBox` のサイズ) |
+| `opaque` | 透過を含まない画像なら `true` (JPEG を出力する) |
+| `blurhash` | 白背景に合成して計算した BlurHash |
+| `files[].path` | オリジンからのパス |
+| `files[].label` | サイズ違いのファイルの補足 (`180px` など) |
+
+型定義は [`docs/src/lib/manifest-types.ts`](https://github.com/morinoparty/moripa-assets/blob/main/docs/src/lib/manifest-types.ts) にあります。
+
+## BlurHash
+
+各素材の `blurhash` は、画像を読み込むまでのプレースホルダーに使えます。
+長辺 4、短辺は縦横比に応じて 1〜4 の成分数で計算しています。透過を含む画像は白背景に合成してから計算しています。
+
+```tsx
+import { Blurhash } from "react-blurhash";
+
+<Blurhash hash={asset.blurhash} width={480} height={270} />
+```
+
+## キャッシュと CORS
+
+| パス | `Cache-Control` |
+|------|-----------------|
+| `/<category>/*` | `public, max-age=86400, stale-while-revalidate=604800` |
+| `/manifest.json` | `public, max-age=300` |
+
+URL にハッシュを含めないため、素材を差し替えると最大 1 日ほど古い画像が表示されることがあります。
+すべてのレスポンスに `Access-Control-Allow-Origin: *` を付けているため、`fetch` や `<canvas>` からも読み込めます。

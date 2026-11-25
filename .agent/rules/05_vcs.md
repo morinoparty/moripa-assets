@@ -7,7 +7,7 @@
 ## 作業完了後の流れ
 
 - 作業が終わったら、ユーザーに確認を求めずに、以下を続けて行うこと
-  1. ビルドはないため、`git status` と `02_coding.md` の「作業後の確認」（`city/<id>/` の 6 ファイルが揃っているか、`file logo/* city/*/*` で形式が正しいか、`README.md` と一致しているか）を確認する
+  1. `git status` と `02_coding.md` の「作業後の確認」（`docs/` での `pnpm build`・`pnpm check:ci`・`pnpm typecheck`、街の素材が揃っているか、`README.md` と一致しているか）を確認する
   2. すべての変更をコミットする
   3. ブランチを push する
   4. `gh pr create` で main ブランチに対してプルリクエストを作成する
