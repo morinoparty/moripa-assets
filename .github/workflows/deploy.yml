@@ -38,11 +38,12 @@ jobs:
         working-directory: docs
         run: pnpm run build
 
-      # docs/out を assets-only Worker (https://assets.morinoparty.workers.dev/) としてデプロイする
+      # Cloudflare CLI (cf deploy ./out) で docs/out を assets-only Worker (https://assets.morinoparty.workers.dev/) としてデプロイする
       # CLOUDFLARE_API_TOKEN と CLOUDFLARE_ACCOUNT_ID は org シークレット
       - name: Deploy
         working-directory: docs
         run: pnpm run deploy
         env:
+          CF_SEND_TELEMETRY: "false"
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
