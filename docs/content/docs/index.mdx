@@ -1,0 +1,45 @@
+---
+title: Introduction
+description: もりのパーティ (morinoparty) のロゴ・画像などの素材置き場
+---
+
+moripa-assets は、もりのパーティ (morinoparty) の各種サイトやコンテンツで使うロゴ・街の画像・favicon を 1 か所にまとめて配信するリポジトリです。
+素材は `https://assets.morinoparty.workers.dev/` から配信しています。
+
+## 素材を探す
+
+| ページ | 内容 |
+|--------|------|
+| [ロゴ](/gallery/logo) | もりのパーティのロゴ、もりパニュース、切手・スタンプ |
+| [街](/gallery/city) | 各街の風景画像と、キャッチコピー＋街名の文字画像 |
+| [favicon](/gallery/favicon) | 各サイトの favicon (ICO と各サイズの PNG) |
+
+各素材のカードでは、形式のボタンをクリックすると公開 URL をコピーできます。
+`<img>` / `<picture>` の HTML と、読み込み中のプレースホルダーに使える [BlurHash](https://blurha.sh/) もコピーできます。
+
+## URL の形式
+
+```text
+https://assets.morinoparty.workers.dev/<category>/<group>/<name>.<ext>
+```
+
+| 部分 | 内容 | 例 |
+|------|------|----|
+| `<category>` | 素材の種類 | `logo`, `city`, `favicon` |
+| `<group>` | 素材のまとまり (ロゴ・街・サイトなど) | `morinoparty`, `morimoto`, `fishing` |
+| `<name>` | `<group>` または `<group>-<variant>` | `morimoto`, `morimoto-text` |
+| `<ext>` | 形式 | `png`, `webp`, `avif`, `jpg`, `svg`, `ico` |
+
+例: `https://assets.morinoparty.workers.dev/city/morimoto/morimoto.avif`
+
+すべての素材の一覧 (サイズ、バイト数、BlurHash を含む) は [`/manifest.json`](https://assets.morinoparty.workers.dev/manifest.json) で取得できます。使い方は [使い方](/usage) を参照してください。
+
+## 街
+
+| ID | 街 | キャッチコピー |
+|----|----|----------------|
+| `morimoto` | もりもと | はじまりの都市 |
+| `umimoto` | うみもと | 潮風のかほり |
+| `atsumori` | あつもり | あちちちち！！ |
+| `kamimori` | かみもり | 神々いづるまち。 |
+| `sekkakyo` | 雪華郷 | 愛に雪、恋を白 |

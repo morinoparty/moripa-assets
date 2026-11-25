@@ -1,0 +1,118 @@
+---
+title: Docs Site
+description: ドキュメントサイトと配信の構成、コマンド
+---
+
+# ドキュメントサイト
+
+このドキュメントサイトは `docs/` にある単独の pnpm プロジェクトです。
+[Fumadocs](https://fumadocs.dev/) を [TanStack Start](https://tanstack.com/start) の上で動かし、[Vite+](https://viteplus.dev/) (`vp`) で開発サーバーの起動、ビルド、フォーマット、リントを行います。
+ビルドではまず `assets/` から配信する素材を生成し、すべてのページをプリレンダーして、素材とあわせて静的サイトとして `docs/out` に出力します。
+`docs/out` は Cloudflare Workers の static assets として `https://assets.morinoparty.workers.dev/` で配信します。
+
+ドキュメントの構成は [PluginTemplateKt](https://github.com/morinoparty/PluginTemplateKt) のドキュメントサイトをもとにしています。
+
+## コマンド
+
+| コマンド | 内容 |
+|---------|------|
+| `pnpm assets` | `assets/` から配信する素材とマニフェストを `docs/public/` に生成する (`scripts/build-assets.ts`) |
+| `pnpm dev` | 素材を生成して開発サーバーを起動する (`vp dev`、`http://localhost:3000/`) |
+| `pnpm build` | 素材を生成して静的サイトを `docs/out` に出力する (`vp build`) |
+| `pnpm run deploy` | `docs/out` を Cloudflare Workers にデプロイする (`wrangler deploy`。`pnpm deploy` は pnpm の組み込みコマンドのため `run` が必要) |
+| `pnpm preview` | ビルドしたサイトを確認する (`vp preview`) |
+| `pnpm check` | フォーマットとリントを行い、修正できるものは修正する (`vp check --fix`) |
+| `pnpm check:ci` | フォーマットとリントを検証する (`vp check`) |
+| `pnpm typecheck` | 型チェックを行う (`tsc --noEmit`) |
+
+CI (`check.yml`) でも `pnpm build` (素材の生成を含む)、`pnpm check:ci`、`pnpm typecheck` を実行します。GitHub Actions では [`voidzero-dev/setup-vp`](https://github.com/voidzero-dev/setup-vp) で Vite+・Node (`docs/.node-version`)・pnpm (`docs/package.json` の `packageManager`) をまとめて準備し、依存を `--frozen-lockfile` で install します。
+
+## 構成
+
+| パス | 役割 |
+|------|------|
+| `content/docs/` | ドキュメント本文 (MDX) とサイドバーの構成 (`meta.json`) |
+| `src/routes/` | TanStack Start のルート (ドキュメントページ、検索インデックス、`llms.txt` など) |
+| `scripts/build-assets.ts` | `assets/` から配信する素材とマニフェストを生成するスクリプト |
+| `src/components/asset-gallery.tsx` | 素材の一覧 (`<AssetCategory category="logo" />`) のコンポーネント |
+| `src/lib/shared.ts` | サイト名、GitHub リポジトリ、マニフェストの読み込み |
+| `src/lib/manifest-types.ts` | `manifest.json` の型 |
+| `src/lib/source.ts` | Fumadocs のソースの定義と、サイドバーで使うアイコンの対応表 |
+| `src/styles/` | Tailwind CSS (fumadocs-ui) と Chlorophyll のデザイントークンの CSS |
+| `vite.config.ts` | Vite+ の設定 (プラグイン、プリレンダー、フォーマット、リント) |
+| `pnpm-workspace.yaml` | Vite+ のバージョン (catalog) と pnpm の設定 |
+| `panda.config.ts` | Chlorophyll のプリセットからデザイントークンを生成する Panda CSS の設定 |
+| `source.config.ts` | すべての MDX に共通する remark プラグインの設定 |
+| `wrangler.jsonc` | Cloudflare Workers (static assets) の設定 |
+| `public/` | `pnpm assets` が生成する素材・`manifest.json`・`_headers` (git には含めない) |
+| `src/generated/` | `pnpm assets` が生成するマニフェスト (ドキュメントのビルドで読み込む。git には含めない) |
+
+`src/routeTree.gen.ts` はルートから自動生成されるファイルです。手で編集しないでください。
+
+## ページの追加
+
+1. `content/docs/` の該当するディレクトリに MDX ファイルを追加します。
+2. 同じディレクトリの `meta.json` の `pages` にファイル名 (拡張子なし) を追加します。
+
+MDX では、`mermaid` のコードブロックで図を描けるほか、`:::note` や `:::warning` などのディレクティブで注意書きを表示できます。
+
+### アイコン
+
+`meta.json` の区切り (`---[Rocket]はじめに---` など) やページのフロントマターでは、[Lucide](https://lucide.dev/icons/) のアイコンを名前で指定できます。
+ただし、ブラウザに読み込むアイコンを減らすために、使えるアイコンは `src/lib/source.ts` の対応表に登録したものだけにしています。
+新しいアイコンを使う場合は、対応表に追加してください。
+
+```ts
+// src/lib/source.ts
+import { Hammer, Images, Rocket } from "lucide-react";
+
+const icons = { Hammer, Images, Rocket };
+```
+
+## デザイン
+
+色のデザイントークンは、morinoparty のデザインシステム [Chlorophyll](https://github.com/morinoparty/Chlorophyll) (`@morinoparty/chlorophyll-react`) のものを使っています。
+`panda.config.ts` で Chlorophyll の Panda CSS プリセットからトークンだけを取り出し、CSS 変数 (`--mpc-colors-mori-*` など) として出力しています。
+コンポーネントは fumadocs-ui のものを使い、色をこれらの CSS 変数で上書きしています。ダークモードは提供せず、ライトテーマ固定です。
+サイドバーやヘッダーのボタンの大きさ・配置、選択中のページの色は、PluginTemplateKt と同じく [MineAuth のドキュメント](https://mineauth.plugin.morino.party/docs/) にそろえて `src/styles/app.css` で上書きしています。
+
+## 配信
+
+`docs/out` を Cloudflare Workers の static assets (Worker 名 `assets`、スクリプトなし) としてデプロイします。
+
+| パス | 内容 |
+|------|------|
+| `/` | ドキュメントのトップページ (`content/docs/index.mdx`) |
+| `/<category>/...` | 素材 (`logo/`, `city/`, `favicon/`) |
+| `/manifest.json` | すべての素材の一覧 |
+| `/gallery/<category>/` | 素材の一覧ページ |
+
+ドキュメントのページは素材のパス (`/logo/` など) と重ならないよう、`/gallery/` の下に置いています。
+`vite.config.ts` のプリレンダーの設定で、素材のパスをページとして書き出さないようにしています。
+
+CORS とキャッシュのヘッダーは、`scripts/build-assets.ts` が生成する `_headers` で指定しています。
+
+main ブランチへの push で、`.github/workflows/deploy.yml` がビルドしてデプロイします。
+Cloudflare の API トークンとアカウント ID は、org シークレットの `CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` から読みます。プルリクエストでは `.github/workflows/check.yml` がビルド、フォーマット、リント、型チェックを行います。
+
+## BASE_PATH
+
+サブパスに配置する場合は、ビルド時に環境変数 `BASE_PATH` を指定します。リンクやアセットの URL、検索インデックスの URL にこのパスが付きます。
+コピー用の URL は、`BASE_PATH` に関係なく常に `https://assets.morinoparty.workers.dev/` から始まります。
+
+```bash
+BASE_PATH=/preview pnpm build
+```
+
+## 出力されるファイル
+
+| パス | 内容 |
+|------|------|
+| `index.html` | ドキュメントのトップページ (`content/docs/index.mdx`) |
+| `**/index.html` | 各ドキュメントページ (例: `gallery/logo/index.html`) |
+| `<category>/**` | 素材 (`public/` からコピー) |
+| `manifest.json` | すべての素材の一覧 |
+| `_headers` | CORS とキャッシュのヘッダー |
+| `api/search.json` | 検索インデックス (検索はブラウザ内で行う) |
+| `llms.txt` / `llms-full.txt` | LLM 向けのページ一覧と全文 |
+| `404.html` | 存在しない URL で返すページ (`src/routes/404.tsx`) |
