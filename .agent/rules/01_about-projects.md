@@ -15,7 +15,7 @@ Cloudflare Workers（https://assets.morinoparty.workers.dev/）から配信し�
 
 | パス | 内容 |
 | --- | --- |
-| `assets/logo/morinoparty/` | もりのパーティのロゴ（`morinoparty.png`）、線画（`morinoparty-border.svg`）、切手（`morinoparty-kitte.png`）、スタンプ（`morinoparty-stamp.png`） |
+| `assets/logo/morinoparty/` | もりのパーティのロゴ（`morinoparty.svg`）、文字ロゴ（`morinoparty-text-white.svg`）、線画（`morinoparty-border.svg`）、切手（`morinoparty-kitte.png`）、スタンプ（`morinoparty-stamp.png`） |
 | `assets/logo/moripanews/` | もりパニュースのロゴ（`moripanews.svg`） |
 | `assets/city/<id>/` | 街の風景画像 `<id>.png`（1920x1080）と、キャッチコピー＋街名の文字画像 `<id>-text.png`（透過、高さ 220px） |
 | `assets/favicon/fishing/` | MoripaFishing のドキュメントの favicon（`fishing.png`、648x648） |

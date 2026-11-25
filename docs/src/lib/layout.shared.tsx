@@ -7,7 +7,7 @@ export function baseOptions(): BaseLayoutProps {
         nav: {
             title: (
                 <span className="flex items-center gap-2 text-lg font-bold">
-                    <img src={localAssetUrl("logo/morinoparty/morinoparty.png")} alt="" width={24} height={24} />
+                    <img src={localAssetUrl("logo/morinoparty/morinoparty.svg")} alt="" width={24} height={24} />
                     {appName}
                 </span>
             ),
