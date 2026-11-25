@@ -19,7 +19,7 @@ description: ドキュメントサイトと配信の構成、コマンド
 | `pnpm assets` | `assets/` から配信する素材とマニフェストを `docs/public/` に生成する (`scripts/build-assets.ts`) |
 | `pnpm dev` | 素材を生成して開発サーバーを起動する (`vp dev`、`http://localhost:3000/`) |
 | `pnpm build` | 素材を生成して静的サイトを `docs/out` に出力する (`vp build`) |
-| `pnpm deploy` | `docs/out` を Cloudflare Workers にデプロイする (`wrangler deploy`) |
+| `pnpm run deploy` | `docs/out` を Cloudflare Workers にデプロイする (`wrangler deploy`。`pnpm deploy` は pnpm の組み込みコマンドのため `run` が必要) |
 | `pnpm preview` | ビルドしたサイトを確認する (`vp preview`) |
 | `pnpm check` | フォーマットとリントを行い、修正できるものは修正する (`vp check --fix`) |
 | `pnpm check:ci` | フォーマットとリントを検証する (`vp check`) |

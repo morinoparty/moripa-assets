@@ -162,8 +162,10 @@ async function processSource(src: Source): Promise<AssetEntry> {
     const rasterSize = { w: rasterMeta.width, h: rasterMeta.height };
 
     if (isSvg) await write(`${src.name}.svg`, "svg", input, { w: width, h: height });
-    // PNG の元画像はそのまま配信する (再エンコードで劣化・肥大化させない)
-    const png = src.ext === ".png" ? input : await raster.clone().png({ compressionLevel: 9 }).toBuffer();
+    // PNG の元画像はそのまま配信する (再エンコードで肥大化させない)
+    // ICC プロファイルを含む場合だけ、sRGB に変換するために再エンコードする (他の形式と色をそろえる)
+    const png =
+        src.ext === ".png" && !original.icc ? input : await raster.clone().png({ compressionLevel: 9 }).toBuffer();
     await write(`${src.name}.png`, "png", png, rasterSize);
     await write(
         `${src.name}.webp`,

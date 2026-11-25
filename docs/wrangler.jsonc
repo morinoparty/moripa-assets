@@ -1,7 +1,7 @@
 /**
  * ドキュメントサイトと素材 (docs/out) を Cloudflare Workers の static assets として配信する。
  * assets-only Worker (main なし・binding なし)。https://assets.morinoparty.workers.dev/
- * デプロイ: pnpm build && pnpm deploy (CI: .github/workflows/deploy.yml)
+ * デプロイ: pnpm build && pnpm run deploy (CI: .github/workflows/deploy.yml)
  */
 {
     "$schema": "node_modules/wrangler/config-schema.json",
