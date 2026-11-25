@@ -5,7 +5,6 @@ onlyBuiltDependencies:
     - "@parcel/watcher"
     - esbuild
     - sharp
-    - workerd
 
 # Vite+ のバージョンはここで一元管理する
 catalog:

@@ -84,7 +84,7 @@ export default defineConfig({
         outDir: "dist",
     },
     environments: {
-        // 静的サイトとして公開するディレクトリ (wrangler.jsonc の assets.directory)
+        // 静的サイトとして公開するディレクトリ (package.json の deploy スクリプトで cf deploy ./out に渡す)
         client: { build: { outDir: "out" } },
     },
     server: {

@@ -33,5 +33,5 @@ Cloudflare Workers（https://assets.morinoparty.workers.dev/）から配信し�
 ## 主な技術スタック
 - 素材の生成: Node.js（TypeScript をそのまま実行）、sharp、blurhash
 - ドキュメント: Fumadocs、TanStack Start、Vite+（`vp`）、Tailwind CSS、Chlorophyll のデザイントークン（Panda CSS）
-- 配信: Cloudflare Workers の static assets（`docs/wrangler.jsonc`、Worker 名 `assets`）
+- 配信: Cloudflare Workers の static assets（`docs/cloudflare.config.ts`、Worker 名 `assets`）。デプロイは Cloudflare CLI（`cf deploy ./out`）
 - パッケージマネージャー: pnpm（`docs/` が単独の pnpm プロジェクト）

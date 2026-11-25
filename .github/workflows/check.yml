@@ -36,3 +36,10 @@ jobs:
       - name: Typecheck
         working-directory: docs
         run: pnpm run typecheck
+
+      # cloudflare.config.ts と docs/out からデプロイの内容を作り、アップロードせずに検証する
+      - name: Deploy (dry run)
+        working-directory: docs
+        run: pnpm exec cf deploy ./out --dry-run
+        env:
+          CF_SEND_TELEMETRY: "false"

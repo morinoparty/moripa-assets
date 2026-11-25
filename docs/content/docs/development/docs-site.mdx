@@ -19,7 +19,7 @@ description: ドキュメントサイトと配信の構成、コマンド
 | `pnpm assets` | `assets/` から配信する素材とマニフェストを `docs/public/` に生成する (`scripts/build-assets.ts`) |
 | `pnpm dev` | 素材を生成して開発サーバーを起動する (`vp dev`、`http://localhost:3000/`) |
 | `pnpm build` | 素材を生成して静的サイトを `docs/out` に出力する (`vp build`) |
-| `pnpm run deploy` | `docs/out` を Cloudflare Workers にデプロイする (`wrangler deploy`。`pnpm deploy` は pnpm の組み込みコマンドのため `run` が必要) |
+| `pnpm run deploy` | `docs/out` を Cloudflare Workers にデプロイする (`cf deploy ./out`。`pnpm deploy` は pnpm の組み込みコマンドのため `run` が必要) |
 | `pnpm preview` | ビルドしたサイトを確認する (`vp preview`) |
 | `pnpm check` | フォーマットとリントを行い、修正できるものは修正する (`vp check --fix`) |
 | `pnpm check:ci` | フォーマットとリントを検証する (`vp check`) |
@@ -43,7 +43,7 @@ CI (`check.yml`) でも `pnpm build` (素材の生成を含む)、`pnpm check:ci
 | `pnpm-workspace.yaml` | Vite+ のバージョン (catalog) と pnpm の設定 |
 | `panda.config.ts` | Chlorophyll のプリセットからデザイントークンを生成する Panda CSS の設定 |
 | `source.config.ts` | すべての MDX に共通する remark プラグインの設定 |
-| `wrangler.jsonc` | Cloudflare Workers (static assets) の設定 |
+| `cloudflare.config.ts` | Cloudflare Workers (static assets) の設定 ([Cloudflare CLI](https://developers.cloudflare.com/cf/) `cf` が読む) |
 | `public/` | `pnpm assets` が生成する素材・`manifest.json`・`_headers` (git には含めない) |
 | `src/generated/` | `pnpm assets` が生成するマニフェスト (ドキュメントのビルドで読み込む。git には含めない) |
 
@@ -78,7 +78,8 @@ const icons = { Hammer, Images, Rocket };
 
 ## 配信
 
-`docs/out` を Cloudflare Workers の static assets (Worker 名 `assets`、スクリプトなし) としてデプロイします。
+`docs/out` を Cloudflare Workers の static assets (Worker 名 `assets`、スクリプトなし) として、[Cloudflare CLI](https://developers.cloudflare.com/cf/) (`cf`) でデプロイします。
+`cf deploy ./out` はビルドを行わず、`docs/out` をそのままアップロードします。Worker の名前や 404 の扱いは `cloudflare.config.ts` から読みます。
 
 | パス | 内容 |
 |------|------|
@@ -92,7 +93,7 @@ const icons = { Hammer, Images, Rocket };
 
 CORS とキャッシュのヘッダーは、`scripts/build-assets.ts` が生成する `_headers` で指定しています。
 
-main ブランチへの push で、`.github/workflows/deploy.yml` がビルドしてデプロイします。
+main ブランチへの push で、`.github/workflows/deploy.yml` がビルドしてデプロイします。プルリクエストでは `check.yml` が `cf deploy ./out --dry-run` でデプロイの内容を検証します。
 Cloudflare の API トークンとアカウント ID は、org シークレットの `CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` から読みます。プルリクエストでは `.github/workflows/check.yml` がビルド、フォーマット、リント、型チェックを行います。
 
 ## BASE_PATH

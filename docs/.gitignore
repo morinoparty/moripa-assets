@@ -15,8 +15,8 @@ styled-system/
 public/
 src/generated/
 
-# Wrangler
-.wrangler/
+# Cloudflare CLI (cf) が生成する Build Output など
+.cloudflare/
 
 # IDE
 .idea/
