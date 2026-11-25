@@ -17,7 +17,8 @@
 
 | 元画像 | 内容 |
 | --- | --- |
-| `assets/logo/morinoparty/morinoparty.png` | もりのパーティのロゴ（72px） |
+| `assets/logo/morinoparty/morinoparty.svg` | もりのパーティのロゴ |
+| `assets/logo/morinoparty/morinoparty-text-white.svg` | 「もりのパーティ」の文字ロゴ（白） |
 | `assets/logo/morinoparty/morinoparty-border.svg` | もりのパーティのロゴ（線画） |
 | `assets/logo/morinoparty/morinoparty-kitte.png` | 切手 |
 | `assets/logo/morinoparty/morinoparty-stamp.png` | スタンプ |
@@ -65,7 +66,7 @@ pnpm build   # 素材を生成して docs/out に出力
 
 | 旧パス | 新パス |
 | --- | --- |
-| `logo/logo-72.png` | `assets/logo/morinoparty/morinoparty.png` |
+| `logo/logo-72.png` | （`assets/logo/morinoparty/morinoparty.svg` に置き換え） |
 | `logo/logo_border.svg` | `assets/logo/morinoparty/morinoparty-border.svg` |
 | `logo/morino_kitte.png` | `assets/logo/morinoparty/morinoparty-kitte.png` |
 | `logo/morino_stamp.png` | `assets/logo/morinoparty/morinoparty-stamp.png` |
@@ -73,3 +74,6 @@ pnpm build   # 素材を生成して docs/out に出力
 | `city/<id>/<id>{,-text}.png` | `assets/city/<id>/<id>{,-text}.png` |
 
 `favicon/fishing/fishing.png` は、MoripaFishing の `docs/public/favicon.svg` に埋め込まれていた 648x648 の PNG（Display P3）を取り出し、sRGB に変換したものです。
+
+`logo/morinoparty/morinoparty.svg` と `morinoparty-text-white.svg` は、`morinopartyweb` リポジトリの `assets/svg/moripa-img-nobg-logo.svg` と `assets/svg/moripalogo.svg` をそのままコピーしたものです
+（2026-11-25 に、72px の `logo-72.png` を同じロゴのベクター版に置き換えました）。
